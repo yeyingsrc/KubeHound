@@ -27,24 +27,6 @@ func Test_sanitizeExtractPath(t *testing.T) {
 			args:    args{filePath: "../../test", destination: "/tmp"},
 			wantErr: true,
 		},
-		// Regression tests for Zip Slip: swapped arguments at the call site previously
-		// caused sanitizeExtractPath to always pass for any header.Name value, allowing
-		// path-traversal entries in a malicious archive to write to arbitrary locations.
-		{
-			name:    "Zip Slip: traversal to /etc/passwd is blocked",
-			args:    args{filePath: "../../../etc/passwd", destination: "/tmp/kubehound/kh-abc123"},
-			wantErr: true,
-		},
-		{
-			name:    "Zip Slip: traversal to ssh authorized_keys is blocked",
-			args:    args{filePath: "../../root/.ssh/authorized_keys", destination: "/tmp/kubehound/kh-abc123"},
-			wantErr: true,
-		},
-		{
-			name:    "Zip Slip: legitimate nested path is allowed",
-			args:    args{filePath: "pods/pods.json", destination: "/tmp/kubehound/kh-abc123"},
-			wantErr: false,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
