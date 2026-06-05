@@ -94,7 +94,7 @@ func ExtractTarGz(ctx context.Context, checkOnly bool, archivePath string, baseP
 			return err
 		}
 
-		err = sanitizeExtractPath(basePath, header.Name)
+		err = sanitizeExtractPath(header.Name, basePath)
 		if err != nil {
 			return err
 		}
